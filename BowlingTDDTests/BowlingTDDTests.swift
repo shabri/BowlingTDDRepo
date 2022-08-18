@@ -12,16 +12,8 @@ class Bowling {
     private var totalScore: Int = 0
     private var wasLastAStrike: Bool = false
     func roll(pins: Int)  {
-        if wasLastAStrike {
-            totalScore += pins*2
-        } else {
-            totalScore += pins
-        }
-        if pins == 10 {
-            wasLastAStrike = true
-        } else {
-            wasLastAStrike = false
-        }
+        totalScore += wasLastAStrike ? pins*2 : pins
+        wasLastAStrike = pins == 10 ? true : false
     }
     
     func score() -> Int {
