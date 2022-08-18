@@ -10,8 +10,18 @@ import XCTest
 
 class Bowling {
     private var totalScore: Int = 0
+    private var wasLastAStrike: Bool = false
     func roll(pins: Int)  {
-        totalScore += pins
+        if wasLastAStrike {
+            totalScore += pins*2
+        } else {
+            totalScore += pins
+        }
+        if pins == 10 {
+            wasLastAStrike = true
+        } else {
+            wasLastAStrike = false
+        }
     }
     
     func score() -> Int {
@@ -20,17 +30,25 @@ class Bowling {
 }
 
 class BowlingTDDTests: XCTestCase {
+    let game = Bowling()
+
     func testScoreWhenNoRollsShouldBeZero() {
-        let game = Bowling()
         XCTAssertEqual(0, game.score())
     }
     
     func testScoreWhenYouRollSomePins() {
-        let game = Bowling()
         game.roll(pins: 0)
         XCTAssertEqual(0, game.score())
         let rolledScore = 1
         game.roll(pins: rolledScore)
         XCTAssertEqual(rolledScore, game.score())
+    }
+    
+    func testStrike() {
+        game.roll(pins: 10)
+        (1...9).forEach { _ in
+            game.roll(pins: 1)
+        }
+        XCTAssertEqual(20, game.score())
     }
 }
